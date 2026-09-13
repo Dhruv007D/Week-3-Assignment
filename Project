@@ -1,0 +1,63 @@
+Project Workflow
+python
+
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+
+# Step 1: Load Iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target   # true labels (species)
+
+# Step 2: Apply K-Means clustering (k=3)
+kmeans = KMeans(n_clusters=3, random_state=42)
+clusters = kmeans.fit_predict(X)
+
+print("Cluster Centers:\n", kmeans.cluster_centers_)
+
+# Step 3: Apply PCA to reduce to 2D
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+
+# Step 4: Visualize clusters
+plt.figure(figsize=(8,6))
+plt.scatter(X_pca[:,0], X_pca[:,1], c=clusters, cmap='viridis', s=50)
+plt.scatter(pca.transform(kmeans.cluster_centers_)[:,0],
+            pca.transform(kmeans.cluster_centers_)[:,1],
+            c='red', marker='X', s=200, label='Cluster Centers')
+plt.xlabel("PCA Component 1")
+plt.ylabel("PCA Component 2")
+plt.title("K-Means Clusters on Iris Dataset (PCA 2D)")
+plt.legend()
+plt.show()
+
+# Step 5: Compare predicted clusters vs true labels
+comparison_df = pd.DataFrame({"True Label": y, "Predicted Cluster": clusters})
+print(comparison_df.head(15))
+🔑 Key Points
+K-Means (k=3): Groups the Iris dataset into 3 clusters (matching the 3 species).
+
+Cluster Centers: Mean feature values of each cluster in the original 4D space.
+
+PCA: Reduces dimensions to 2D for visualization.
+
+Comparison: You can check how well the predicted clusters align with the true species labels.
+
+📊 Typical Output
+Cluster Centers (original features):
+
+Code
+[[5.006 3.428 1.462 0.246]
+ [6.85  3.07  5.74  2.0  ]
+ [5.9   2.75  4.39  1.39 ]]
+Comparison Table (first 15 rows):
+
+Code
+   True Label  Predicted Cluster
+0           0                 1
+1           0                 1
+2           0                 1
+...
