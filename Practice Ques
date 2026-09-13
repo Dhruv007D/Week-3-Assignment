@@ -1,0 +1,53 @@
+# Week-3-Assignment
+
+# Step 1: Import libraries
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.cluster import KMeans
+from sklearn.decomposition import PCA
+
+# Step 2: Load Iris dataset
+iris = load_iris()
+X = iris.data
+y = iris.target
+
+# Step 3: Apply K-Means clustering
+kmeans = KMeans(n_clusters=3, random_state=42)
+clusters = kmeans.fit_predict(X)
+
+# Print cluster centers
+print("Cluster Centers:\n", kmeans.cluster_centers_)
+
+# Step 4: Apply PCA to reduce dataset to 2D
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+
+# Step 5: Visualize clusters in 2D
+plt.figure(figsize=(8,6))
+plt.scatter(X_pca[:,0], X_pca[:,1], c=clusters, cmap='viridis', s=50)
+plt.scatter(pca.transform(kmeans.cluster_centers_)[:,0],
+            pca.transform(kmeans.cluster_centers_)[:,1],
+            c='red', marker='X', s=200, label='Cluster Centers')
+plt.xlabel("PCA Component 1")
+plt.ylabel("PCA Component 2")
+plt.title("K-Means Clusters on Iris (2D PCA)")
+plt.legend()
+plt.show()
+
+# Step 6: Explained variance ratio
+print("Explained Variance Ratio:", pca.explained_variance_ratio_)
+
+
+
+Typical Output
+Cluster Centers (original 4D space):
+
+Code
+[[5.006 3.428 1.462 0.246]
+ [6.85  3.07  5.74  2.0  ]
+ [5.9   2.75  4.39  1.39 ]]
+Explained Variance Ratio:
+
+Code
+[0.92461872 0.05306648]
